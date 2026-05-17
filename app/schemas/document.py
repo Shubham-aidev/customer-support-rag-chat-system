@@ -1,13 +1,13 @@
 from pydantic import BaseModel#, EmailStr, Field , field_validator
 
-# document upload request schema
-class DocumentRequest(BaseModel):
 
-    title:str
-    department:str
-    document_type:str
-    version:int
-    file_content:str
+
+class DocumentMetaData(BaseModel):
+    title: str
+    document_type: str
+    department: str
+    version: int
+
 
 # document upload response schema
 class DocumentResponse(BaseModel):
