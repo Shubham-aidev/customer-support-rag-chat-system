@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from models.user import User
 
-from schemas.user import UserInputSchema, UserLoginSchema
+from schemas.auth import UserInputSchema, UserLoginSchema
 from core.security import hash_password, verify_password
 from core.jwt_token import create_token
 
@@ -57,21 +57,27 @@ def create_user(user: UserInputSchema,db: Session):
 
 
 # login function
-def login(credentials:UserLoginSchema,db:Session):
+def login(credentials,db:Session):
     
     # fetch user data from db
     db_user = (
                 db.query(User)
-               .filter(User.email == credentials.email).first()
+               .filter(User.username == credentials.username).first()
                )
     if db_user == None:
-        raise Exception("Invalid credentials")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials"
+        )
     
     # verify password
     if not verify_password(plain_password=credentials.password,
                            hash_password=db_user.password_hash):
         
-        raise Exception("Invalid credentials")
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid credentials"
+        )
     
     # generate token with user_id,expiry
     payload = {"user_id":db_user.id}

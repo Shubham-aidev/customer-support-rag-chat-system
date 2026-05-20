@@ -39,7 +39,7 @@ def get_current_user(token:str = Depends(oauth_scheme),
 
 def require_admin(current_user:User=Depends(get_current_user)):
     
-    if current_user.role != "admin":
+    if current_user.role.value != "admin":
         raise HTTPException(status_code=403,
                             detail="Admin only")
     return current_user

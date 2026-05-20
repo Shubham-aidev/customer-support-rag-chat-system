@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Form, UploadFile, File
 from sqlalchemy.orm import Session
 from dependencies import get_db, require_admin
 from schemas.document import DocumentResponse, DocumentMetaData
-from services.admin import upload_docs
+from services.document import upload_docs
 from models.user import User
 
 router = APIRouter()

@@ -8,6 +8,7 @@ from models.user import User
 from schemas.document import DocumentMetaData
 import os
 from uuid import uuid4
+from ingestion.parser import parse_document
 logger = logging.getLogger(__name__)
 
 # file validation function
@@ -79,6 +80,13 @@ async def upload_docs(meta_data:DocumentMetaData,file:UploadFile,admin:User,db:S
         db.add(db_row)
         db.commit()
         db.refresh(db_row)
+
+        # call parser
+        parse_document(
+            document_id=db_row.id,
+            db=db
+        )
+
         return db_row
     
     except IntegrityError as e:

@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from dependencies import get_db
-from schemas.user import UserInputSchema, UserOutputSchema, UserLoginSchema, TokenResponseSchema
+from schemas.auth import UserInputSchema, UserOutputSchema, UserLoginSchema, TokenResponseSchema
 from services.auth import create_user, login
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter()
 
@@ -17,7 +18,7 @@ def create_user_api(user: UserInputSchema, db: Session = Depends(get_db)):
 
 ## login api
 @router.post("/login",response_model=TokenResponseSchema)
-def login_api(credentials:UserLoginSchema, db:Session = Depends(get_db)):
+def login_api(credentials:OAuth2PasswordRequestForm=Depends(), db:Session = Depends(get_db)):
     
     return login(credentials=credentials,db=db)
 

@@ -18,7 +18,7 @@ class User(Base):
     email = Column(String(100),index=True,unique=True,nullable=False)
     password_hash = Column(String(255),index=False,unique=False,nullable=False)
     # role (user , admin)
-    role = Column(Enum(UserRole),default=UserRole.user,nullable=False)
+    role = Column(Enum(UserRole),default=UserRole.admin,nullable=False)
 
     # Sets time only on creation
     created_at = Column(DateTime,default=func.now(),nullable=False)
